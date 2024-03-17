@@ -3,7 +3,7 @@ package com.example.examapp.model
 import java.time.LocalDate
 import java.time.LocalTime
 
-data class User(
+data class UserUiState(
     val id: Int,
     val name: String,
     val lastname: String,
