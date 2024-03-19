@@ -75,7 +75,7 @@ fun RegistrationFormula(modifier: Modifier = Modifier, userViewModel: UserViewMo
             ),
             selection = CalendarSelection.Date { date ->
                 Log.d("DATE", "$date")
-                // add date to user
+                userViewModel.updateBirtDate(date) // save birthDate
             }
         )
         Button(
@@ -91,7 +91,9 @@ fun RegistrationFormula(modifier: Modifier = Modifier, userViewModel: UserViewMo
             state = clockState,
             selection = ClockSelection.HoursMinutes { hours: Int, minutes: Int ->
                 Log.d("TIME", "$hours:$minutes")
+
                 // TODO Add to User -> hours * 100 + minutes
+                userViewModel.updateBirthTime(hours,minutes)
             }
         )
         Button(
@@ -108,6 +110,7 @@ fun RegistrationFormula(modifier: Modifier = Modifier, userViewModel: UserViewMo
         Button(
             onClick = {
                       // TODO save user
+                       uiState?.let { userViewModel.saveUser(it) }
 
             }, modifier = Modifier
                 .width(280.dp)

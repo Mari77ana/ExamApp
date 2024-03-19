@@ -25,6 +25,7 @@ class UserViewModel() : ViewModel() {
                 val savedUser = RetrofitInstance.userApi.saveUser(user)
                 _userUiState.value = savedUser
                 FetchState.SUCCEEDED_TO_FETCH_USER
+                println("USER SAVED $user")
 
 
             } catch (e: Exception) {
@@ -51,7 +52,6 @@ class UserViewModel() : ViewModel() {
         }
 
     }
-
 
 
     fun getUserById(userId: Int) {
@@ -87,8 +87,9 @@ class UserViewModel() : ViewModel() {
 
     fun updateName(name: String) {
         _userUiState.value = _userUiState.value?.copy(
+            name = name
 
-        )?: UserUiState(
+        ) ?: UserUiState(
             id = null,
             name = name,
             lastname = null,
@@ -96,13 +97,15 @@ class UserViewModel() : ViewModel() {
             birthDate = null,
             birthTime = null
         )
+        println("UPDATE name $name")
 
     }
 
     fun updateLastname(lastname: String) {
         _userUiState.value = _userUiState.value?.copy(
+            lastname = lastname
 
-        )?: UserUiState(
+        ) ?: UserUiState(
             id = null,
             name = null,
             lastname = lastname,
@@ -110,56 +113,58 @@ class UserViewModel() : ViewModel() {
             birthDate = null,
             birthTime = null
         )
+        println("UPDATE Lastname $lastname")
 
     }
 
     fun updateLocation(location: String) {
         _userUiState.value = _userUiState?.value?.copy(
+            location = location
 
-        )?:
-        UserUiState(
+        ) ?: UserUiState(
             id = null,
             name = null,
             lastname = null,
-            location =location,
+            location = location,
             birthDate = null,
             birthTime = null
 
         )
+        println("UPDATE Location $location")
     }
 
     fun updateBirtDate(birthdate: LocalDate) {
         _userUiState.value = _userUiState?.value?.copy(
+            birthDate = birthdate
 
-        )?:
-                UserUiState(
-                    id = null,
-                    name = null,
-                    lastname = null,
-                    location = null,
-                    birthDate = birthdate,
-                    birthTime = null
+        ) ?: UserUiState(
+            id = null,
+            name = null,
+            lastname = null,
+            location = null,
+            birthDate = birthdate,
+            birthTime = null
 
-                )
+        )
+        println("UPDATE Date $birthdate")
     }
 
 
-    fun updateBirthTime(birthTime: LocalTime) {
+    fun updateBirthTime(hours: Int, minutes: Int) {
+        val birthTime = LocalTime.of(hours, minutes)
         _userUiState.value = _userUiState?.value?.copy(
+            birthTime = birthTime
 
-        )?:
-                UserUiState(
-                    id = null,
-                    name = null,
-                    lastname = null,
-                    location = null,
-                    birthDate = null,
-                    birthTime = birthTime
-                )
+        ) ?: UserUiState(
+            id = null,
+            name = null,
+            lastname = null,
+            location = null,
+            birthDate = null,
+            birthTime = birthTime
+        )
+        println("UPDATE Date $birthTime")
     }
-
-
-
 
 
     /*
@@ -187,14 +192,10 @@ class UserViewModel() : ViewModel() {
      */
 
 
-
-
-
-     enum class FetchState {
-         SUCCEEDED_TO_FETCH_USER,
-         FAILED_TO_FETCH_USER
-     }
-
+    enum class FetchState {
+        SUCCEEDED_TO_FETCH_USER,
+        FAILED_TO_FETCH_USER
+    }
 
 
 }
