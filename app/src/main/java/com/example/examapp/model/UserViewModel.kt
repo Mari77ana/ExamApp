@@ -2,6 +2,7 @@ package com.example.examapp.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.examapp.retrofit.RetrofitInstance
 import com.example.examapp.retrofit.UserApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -9,7 +10,8 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 
-class UserViewModel(private val userApi: UserApi) : ViewModel() {
+class UserViewModel() : ViewModel() {
+
 
     private val _userUiState = MutableStateFlow<UserUiState?>(null)
     val userUiState = _userUiState.asStateFlow()
@@ -20,7 +22,7 @@ class UserViewModel(private val userApi: UserApi) : ViewModel() {
     fun saveUser(user: UserUiState) {
         viewModelScope.launch {
             try {
-                val savedUser = userApi.saveUser(user)
+                val savedUser = RetrofitInstance.userApi.saveUser(user)
                 _userUiState.value = savedUser
                 FetchState.SUCCEEDED_TO_FETCH_USER
 
@@ -37,7 +39,7 @@ class UserViewModel(private val userApi: UserApi) : ViewModel() {
     fun getAllUsers() {
         viewModelScope.launch {
             try {
-                val getAllUsers = userApi.getAllUsers()
+                val getAllUsers = RetrofitInstance.userApi.getAllUsers()
                 _userUiState.value = getAllUsers.firstOrNull()
                 FetchState.SUCCEEDED_TO_FETCH_USER
                 println("SUCCESS -> get all users")
@@ -55,7 +57,7 @@ class UserViewModel(private val userApi: UserApi) : ViewModel() {
     fun getUserById(userId: Int) {
         viewModelScope.launch {
             try {
-                val getUser = userApi.getUserById(userId)
+                val getUser = RetrofitInstance.userApi.getUserById(userId)
                 _userUiState.value = getUser
                 FetchState.SUCCEEDED_TO_FETCH_USER
                 println("GET USER -> $getUser")
@@ -66,6 +68,97 @@ class UserViewModel(private val userApi: UserApi) : ViewModel() {
             }
         }
     }
+
+    /*
+    fun updateUser(user: UserUiState) {
+        _userUiState.value = user.copy(
+            id = user.id,
+            name = user.name,
+            lastname = user.lastname,
+            location = user.location,
+            birthDate = user.birthDate,
+            birthTime = user.birthTime
+        )
+
+    }
+
+     */
+
+
+    fun updateName(name: String) {
+        _userUiState.value = _userUiState.value?.copy(
+
+        )?: UserUiState(
+            id = null,
+            name = name,
+            lastname = null,
+            location = null,
+            birthDate = null,
+            birthTime = null
+        )
+
+    }
+
+    fun updateLastname(lastname: String) {
+        _userUiState.value = _userUiState.value?.copy(
+
+        )?: UserUiState(
+            id = null,
+            name = null,
+            lastname = lastname,
+            location = null,
+            birthDate = null,
+            birthTime = null
+        )
+
+    }
+
+    fun updateLocation(location: String) {
+        _userUiState.value = _userUiState?.value?.copy(
+
+        )?:
+        UserUiState(
+            id = null,
+            name = null,
+            lastname = null,
+            location =location,
+            birthDate = null,
+            birthTime = null
+
+        )
+    }
+
+    fun updateBirtDate(birthdate: LocalDate) {
+        _userUiState.value = _userUiState?.value?.copy(
+
+        )?:
+                UserUiState(
+                    id = null,
+                    name = null,
+                    lastname = null,
+                    location = null,
+                    birthDate = birthdate,
+                    birthTime = null
+
+                )
+    }
+
+
+    fun updateBirthTime(birthTime: LocalTime) {
+        _userUiState.value = _userUiState?.value?.copy(
+
+        )?:
+                UserUiState(
+                    id = null,
+                    name = null,
+                    lastname = null,
+                    location = null,
+                    birthDate = null,
+                    birthTime = birthTime
+                )
+    }
+
+
 
 
 
