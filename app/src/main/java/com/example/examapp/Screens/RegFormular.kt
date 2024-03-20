@@ -1,4 +1,4 @@
-package com.example.examapp.registerScreen
+package com.example.examapp.Screens
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -20,21 +20,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.examapp.model.UserUiState
 import com.example.examapp.model.UserViewModel
-import com.example.examapp.retrofit.UserApi
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.clock.ClockDialog
 import com.maxkeppeler.sheets.clock.models.ClockSelection
-import java.time.LocalDate
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationFormula(modifier: Modifier = Modifier, userViewModel: UserViewModel) {
+    var name by remember { mutableStateOf("") }
+    var lastname by remember { mutableStateOf("") }
+    var location by remember { mutableStateOf("") }
+
 
     val uiState by userViewModel.userUiState.collectAsState()
     val calendarState = rememberSheetState()
@@ -47,23 +48,22 @@ fun RegistrationFormula(modifier: Modifier = Modifier, userViewModel: UserViewMo
     ) {
         TextField(
             modifier = Modifier.padding(vertical = 4.dp),
-            value = uiState?.name.orEmpty(),
-            onValueChange = { userViewModel.updateName(it) },
+            value = name,
+            onValueChange = { name = it },
             label = { Text(text = "Firstname") })
 
 
         TextField(
             modifier = Modifier.padding(vertical = 4.dp),
-            value = uiState?.lastname.orEmpty(),
-            onValueChange = {userViewModel.updateLastname(it)
-            },
+            value = lastname,
+            onValueChange = { lastname = it },
             label = { Text(text = "Lastname") })
 
 
         TextField(
             modifier = Modifier.padding(vertical = 4.dp),
-            value = uiState?.location.orEmpty(),
-            onValueChange = { userViewModel.updateLocation(it) },
+            value = location,
+            onValueChange = { location = it },
             label = { Text(text = "Location") }
         )
 
@@ -93,7 +93,7 @@ fun RegistrationFormula(modifier: Modifier = Modifier, userViewModel: UserViewMo
                 Log.d("TIME", "$hours:$minutes")
 
                 // TODO Add to User -> hours * 100 + minutes
-                userViewModel.updateBirthTime(hours,minutes)
+                userViewModel.updateBirthTime(hours, minutes)
             }
         )
         Button(
@@ -109,8 +109,16 @@ fun RegistrationFormula(modifier: Modifier = Modifier, userViewModel: UserViewMo
 
         Button(
             onClick = {
-                      // TODO save user
-                       uiState?.let { userViewModel.saveUser(it) }
+                // TODO save user
+                userViewModel.updateUser(
+                    name = name,
+                    lastname = lastname,
+                    location = location
+                )
+                userViewModel.saveUser()
+                // TODO Navigate to HairdresserScreen
+
+
 
             }, modifier = Modifier
                 .width(280.dp)

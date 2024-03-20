@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.examapp.model.UserViewModel
-import com.example.examapp.registerScreen.RegistrationFormula
+import com.example.examapp.Screens.RegistrationFormula
 import com.example.examapp.ui.theme.ExamAppTheme
 
 class MainActivity : ComponentActivity() {

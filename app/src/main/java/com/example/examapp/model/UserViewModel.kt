@@ -1,9 +1,9 @@
 package com.example.examapp.model
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.examapp.retrofit.RetrofitInstance
-import com.example.examapp.retrofit.UserApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -18,25 +18,50 @@ class UserViewModel() : ViewModel() {
 
     //private val formState = MutableStateFlow(FormState())
 
+    /*
+    fun saveUser(){
+        userUiState.value?.let { user ->
+            viewModelScope.launch {
+                try {
+                    val userApi = RetrofitRepository.createUserApi()
+                    val savedUser = userApi.saveUser(user)
+                    _userUiState.value = savedUser
+                    println("USER SAVED $savedUser")
 
-    fun saveUser(user: UserUiState) {
-        viewModelScope.launch {
-            try {
-                val savedUser = RetrofitInstance.userApi.saveUser(user)
-                _userUiState.value = savedUser
-                FetchState.SUCCEEDED_TO_FETCH_USER
-                println("USER SAVED $user")
+                }catch (e: Exception){
+                    println("USER NOT SAVED $user")
+                    Log.e("saving user", "failed",e)
 
-
-            } catch (e: Exception) {
-                FetchState.FAILED_TO_FETCH_USER
-                println("FAILED -> USER NOT SAVED")
+                }
             }
         }
+    }
 
+     */
+
+
+
+
+    fun saveUser() {
+        userUiState.value?.let { user ->
+            viewModelScope.launch {
+                try {
+                    val savedUser = RetrofitInstance.userApi.saveUser(user)
+                    _userUiState.value = savedUser
+                    FetchState.SUCCEEDED_TO_FETCH_USER
+                    println("USER SAVED $savedUser")
+                } catch (e: Exception) {
+                    FetchState.FAILED_TO_FETCH_USER
+                    println("FAILED -> USER NOT SAVED $user")
+                    Log.e("saving user", "failed",e)
+                }
+            }
+        }
     }
 
 
+
+/*
     fun getAllUsers() {
         viewModelScope.launch {
             try {
@@ -69,6 +94,8 @@ class UserViewModel() : ViewModel() {
         }
     }
 
+ */
+
     /*
     fun updateUser(user: UserUiState) {
         _userUiState.value = user.copy(
@@ -83,6 +110,25 @@ class UserViewModel() : ViewModel() {
     }
 
      */
+
+    fun updateUser(name: String, lastname: String,location: String) {
+        _userUiState.value = _userUiState.value?.copy(
+            name = name,
+            lastname = lastname,
+            location = location,
+
+        ) ?: UserUiState(
+            id = null,
+            name = name,
+            lastname = lastname,
+            location = location,
+            birthDate = null,
+            birthTime = null
+        )
+        println("UPDATE USER ${userUiState.value}")
+        saveUser()
+
+    }
 
 
     fun updateName(name: String) {
@@ -163,7 +209,7 @@ class UserViewModel() : ViewModel() {
             birthDate = null,
             birthTime = birthTime
         )
-        println("UPDATE Date $birthTime")
+        println("UPDATE Time $birthTime")
     }
 
 
